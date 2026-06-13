@@ -1,9 +1,14 @@
-# FastVLM: LiveQandA Agentic Vision System
+# FastVLM: Live Q&A Agentic Vision System
 
-FastVLM is a powerful, real-time Agentic Vision System built on top of the FastVLM Vision-Language Model. It allows you to point a camera at a document, mathematical problem, or real-world object, and get immediate, intelligent answers. The system is split into a Next.js web frontend and a Python/FastAPI backend for ML inference.
+FastVLM is a powerful, **real-time Live Q&A system** built on top of the FastVLM Vision-Language Model. 
+
+**How it works:** Simply turn on your camera and hold up a handwritten or printed question to the screen. The system will instantly read the question using a lightweight "Gatekeeper", process it with a high-speed Vision-Language Model, and generate a live text answer for you. It's like having an intelligent tutor watching your video feed!
+
+The system is split into a Next.js web frontend and a Python/FastAPI backend for ML inference.
 
 ## 🌟 Key Features
 
+* **Live Handwritten Q&A**: Show any handwritten question to your webcam, and the system will automatically detect it and provide a text answer.
 * **Real-time Vision**: Automatically detects when a document or question is held up to the camera using a lightweight contour and text-detection "Gatekeeper".
 * **Agentic Reasoning**: Uses the FastVLM hybrid vision encoder (FastViTHD) to process high-resolution images rapidly, then uses a Large Language Model (Qwen2-0.5B) to generate answers.
 * **Tool Calling**: The ML engine can intelligently call external tools, such as the Tavily API, to search the web for real-time information if the model doesn't know the answer.
