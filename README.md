@@ -44,9 +44,22 @@ venv\Scripts\activate
 # On Mac/Linux:
 # source venv/bin/activate
 
-# Install dependencies
+# Install core dependencies
 pip install -e .
 pip install opencv-python numpy==1.26.4 tavily-python python-dotenv fastapi uvicorn
+
+# 🖥️ Hardware-Specific Setup (Optional but highly recommended)
+
+**For Windows with NVIDIA GPU (CUDA):**
+No extra steps! PyTorch installs CUDA support by default.
+
+**For MacBooks (Apple Silicon M1/M2/M3/M4):**
+Install Apple's MLX engine for sub-100ms inference speeds:
+`pip install mlx mlx-vlm`
+
+**For Windows with AMD/Intel GPU (DirectX 12):**
+Install DirectML for hardware acceleration on non-NVIDIA GPUs:
+`pip install torch-directml`
 ```
 
 *(Note for Windows Users: `numpy==1.26.4` is strictly required to prevent crashes).*
