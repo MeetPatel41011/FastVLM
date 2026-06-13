@@ -1,0 +1,176 @@
+# Repo-root .gitignore.
+# Anything inside ml-fastvlm/ has its own ignore rules in ml-fastvlm/.gitignore.
+
+# ─────────────────────────────────────────────────────────────
+# Python virtual environments (the cause of the slow `git add .`)
+# ─────────────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+**/venv/
+**/.venv/
+
+# Conda
+.conda/
+miniconda3/
+anaconda3/
+
+# ─────────────────────────────────────────────────────────────
+# Python caches + build artifacts
+# ─────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+sdist/
+var/
+wheels/
+*.egg-info/
+*.egg
+.installed.cfg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ─────────────────────────────────────────────────────────────
+# Model weights + archives (multi-GB; never commit these)
+# ─────────────────────────────────────────────────────────────
+# Repo-root checkpoint/model dirs (these mirror ml-fastvlm/ duplicates)
+/checkpoints/
+/models/
+# And anywhere they might appear nested
+**/checkpoints/
+**/models/qwen_export/
+**/models/*.onnx
+**/__MACOSX/
+
+# Common heavy artifact extensions
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.bin
+*.safetensors
+*.onnx
+*.pth
+*.pt
+*.ckpt
+*.mlpackage
+*.mlmodelc
+*.mlmodel
+*.gguf
+
+# ─────────────────────────────────────────────────────────────
+# Secrets — never commit
+# ─────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.p8
+*.p12
+*.mobileprovision
+secrets/
+credentials.json
+
+# ─────────────────────────────────────────────────────────────
+# OS / IDE noise
+# ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+.vs/
+*.swp
+*.swo
+*~
+
+# ─────────────────────────────────────────────────────────────
+# Xcode + fastlane outputs (in case the runner caches drift here)
+# ─────────────────────────────────────────────────────────────
+**/xcuserdata/
+**/*.xcuserstate
+**/DerivedData/
+**/build/
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots/
+**/fastlane/test_output/
+**/.bundle/
+**/vendor/bundle/
+Gemfile.lock
+
+# ─────────────────────────────────────────────────────────────
+# Logs
+# ─────────────────────────────────────────────────────────────
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ─────────────────────────────────────────────────────────────
+# AI / Agent logs, brains, and caches
+# ─────────────────────────────────────────────────────────────
+.gemini/
+.claudebrain/
+.system_generated/
+antigravity/
+.antigravitycli/
+
+# ─────────────────────────────────────────────────────────────
+# Apple signing materials (certs, profiles, keys)
+# ─────────────────────────────────────────────────────────────
+certs/
+profiles/
+*.cer
+*.pem
+
+# ─────────────────────────────────────────────────────────────
+# Node.js (safety net — subdirs have their own .gitignore)
+# ─────────────────────────────────────────────────────────────
+**/node_modules/
+
+# ─────────────────────────────────────────────────────────────
+# Personal / scratch files — not for the public repo
+# ─────────────────────────────────────────────────────────────
+AI_CLEANUP_SUMMARY.txt
+Project-learn.txt
+VIMP.txt
+match_version.txt
+test_api.py
+server_old.py
+server_working.py
+/package-lock.json
+
+# Debug screenshots
+cuss-todo.png
+isssue1.png
+mac.png
+
+# Jupyter / Colab notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Deployment scripts (contain hardcoded local paths)
+deploy_modal.ps1
+upload_weights.ps1
+
+# Research / exploration scripts
+research_agents/
+
+# Internal planning docs
+PLAN.md
+MODAL_MIGRATION_PLAN.md
+implementation_plan.md
+ttft_analysis.md
