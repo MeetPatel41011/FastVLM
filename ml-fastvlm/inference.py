@@ -93,6 +93,21 @@ def extract_math_expression(text: str) -> str:
     return text
 
 
+def extract_search_query(text: str) -> str:
+    """Extract just the actual question or query from VLM conversational output."""
+    import re
+    # Try to extract quoted text first, as VLM often quotes the OCR text
+    match = re.search(r'"([^"]+)"|\'([^\']+)\'', text)
+    if match:
+        extracted = match.group(1) or match.group(2)
+        if len(extracted) > 3:
+            return extracted
+    # Fallback: Strip common conversational prefixes
+    text = re.sub(r'^(?i)(the\s+(?:text|question|image).*?(?:reads|says|is|asks|shows)?:?\s*)', '', text)
+    return text.strip(' "\'')
+
+
+
 def is_garbage_response(text: str) -> bool:
     """Check if the VLM response indicates it couldn't read the image."""
     lower = text.lower()
@@ -433,7 +448,7 @@ class EdgeAgent:
                 yield f"_Source: {MODEL_NAME} + NumPy Matrix Tool_"
                 
             elif tool == "web_search":
-                query = text_for_routing
+                query = extract_search_query(text_for_routing)
                 yield f"🌐 Searching: \"{query}\"\n"
                 try:
                     result = AVAILABLE_TOOLS["web_search"](query)
@@ -442,7 +457,11 @@ class EdgeAgent:
                     
                     # Create text-only prompt
                     synth_conv = conversation_lib.conv_templates["qwen_2"].copy()
-                    synth_qs = f"Based on this web search result:\n{result}\n\nAnswer this question: {query}\nBe concise and clear."
+                    synth_qs = (
+                        f"Context from web search:\n{result}\n\n"
+                        f"Question: {query}\n"
+                        f"Answer the question using only the context above. Keep it brief."
+                    )
                     synth_conv.append_message(synth_conv.roles[0], synth_qs)
                     synth_conv.append_message(synth_conv.roles[1], None)
                     synth_prompt = synth_conv.get_prompt()

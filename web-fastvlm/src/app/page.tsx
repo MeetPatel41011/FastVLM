@@ -25,6 +25,27 @@ export default function Home() {
 
   const isProcessing = status === "THINKING" || status === "ANSWERING" || status === "SCANNING";
 
+  // ─── Hardware Check for Recruiters ───
+  useEffect(() => {
+    const checkHardware = async () => {
+      // Allow bypass via ?force=true in the URL
+      if (typeof window !== "undefined" && window.location.search.includes('force=true')) return;
+
+      const nav = navigator as any;
+      const hasGPU = !!nav.gpu; // Use WebGPU support as a proxy for modern hardware
+      const memory = nav.deviceMemory || 8; // If unsupported, assume 8GB
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+      if (!hasGPU || memory < 8 || isMobile) {
+        alert("Sorry, your device does not have a dedicated GPU or enough memory to run the live AI inference locally. Redirecting you to a recorded demonstration of the working project...");
+        window.location.href = "YOUR_GOOGLE_DRIVE_LINK_HERE";
+      }
+    };
+    
+    // Slight delay to ensure UI renders first before alerting
+    setTimeout(checkHardware, 500);
+  }, []);
+
   // ─── Backend Health Check ───
   const checkBackendHealth = useCallback(async () => {
     try {

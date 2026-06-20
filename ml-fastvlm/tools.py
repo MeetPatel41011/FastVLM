@@ -95,7 +95,8 @@ def execute_web_search(query: str) -> str:
 
     api_key = os.getenv("TAVILY_API_KEY")
     if not api_key:
-        return "Error: TAVILY_API_KEY not found in environment."
+        print("DEBUG: TAVILY_API_KEY not found. Using DuckDuckGo fallback.")
+        return execute_fallback_search(query)
 
     # Clean the query (remove any JSON artifacts if the LLM leaked them)
     if '{' in query:

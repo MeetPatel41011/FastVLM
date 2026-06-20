@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
     "@tavily/core": "^0.7.3",
     "next": "16.2.6",
     "react": "19.2.4",

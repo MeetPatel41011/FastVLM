@@ -10,7 +10,7 @@ The system is split into a Next.js web frontend and a Python/FastAPI backend for
 
 * **Live Handwritten Q&A**: Show any handwritten question to your webcam, and the system will automatically detect it and provide a text answer.
 * **Real-time Vision**: Automatically detects when a document or question is held up to the camera using a lightweight contour and text-detection "Gatekeeper".
-* **Agentic Reasoning**: Uses the FastVLM hybrid vision encoder (FastViTHD) to process high-resolution images rapidly, then uses a Large Language Model (Qwen2-0.5B) to generate answers.
+* **Agentic Reasoning**: Uses the FastVLM hybrid vision encoder (FastViTHD) to process high-resolution images rapidly, then uses a Large Language Model (like Qwen2-0.5B or Qwen2-2B) to generate answers.
 * **Tool Calling**: The ML engine can intelligently call external tools, such as the Tavily API, to search the web for real-time information if the model doesn't know the answer.
 * **Hardware Accelerated**: Automatically detects your hardware (NVIDIA CUDA, Apple Silicon MPS, or CPU) and optimizes inference.
 * **Low Latency**: Engineered for sub-1000ms Time-to-First-Token (TTFT) by using SDPA attention and aggressive preprocessing.
@@ -28,6 +28,7 @@ The project consists of two main folders:
 * **Node.js** (v18+) for the frontend
 * **Python 3.10 or 3.11** for the ML backend
 * **Git** and **git-lfs** (for downloading model weights)
+* **Tesseract OCR** (Optional but recommended for strict text detection)
 * (Optional but recommended) **NVIDIA GPU** or **Apple Silicon Mac** for fast inference
 
 ### 1. Setup the ML Backend (`ml-fastvlm`)
@@ -46,7 +47,7 @@ venv\Scripts\activate
 
 # Install core dependencies
 pip install -e .
-pip install opencv-python numpy==1.26.4 tavily-python python-dotenv fastapi uvicorn
+pip install opencv-python==4.10.0.84 numpy==1.26.4 tavily-python python-dotenv fastapi uvicorn beautifulsoup4
 
 # 🖥️ Hardware-Specific Setup (Optional but highly recommended)
 
@@ -56,6 +57,10 @@ No extra steps! PyTorch installs CUDA support by default.
 **For MacBooks (Apple Silicon M1/M2/M3/M4):**
 Install Apple's MLX engine for sub-100ms inference speeds:
 `pip install mlx mlx-vlm`
+(On Apple Silicon, it automatically uses the smarter `Qwen2-VL-2B-Instruct-4bit` model).
+
+**For Mac/Linux Text Detection (Gatekeeper):**
+`brew install tesseract` (or `sudo apt install tesseract-ocr`)
 
 **For Windows with AMD/Intel GPU (DirectX 12):**
 Install DirectML for hardware acceleration on non-NVIDIA GPUs:
@@ -71,8 +76,8 @@ bash get_models.sh
 ```
 *(This will download the `fastvlm_0.5b_stage3` model to the `ml-fastvlm/checkpoints/` directory).*
 
-#### Configure Environment Variables
-Create a `.env` file in the `ml-fastvlm` folder with your Tavily search key:
+#### 🔑 Configure Environment Variables (Required for Web Search)
+You **must** create a `.env` file in the `ml-fastvlm` folder and set your Tavily API key for web searches to work:
 ```env
 TAVILY_API_KEY=your_tavily_api_key_here
 ```

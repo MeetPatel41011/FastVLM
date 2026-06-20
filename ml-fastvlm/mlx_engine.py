@@ -21,10 +21,10 @@ from threading import Event
 from PIL import Image
 
 # ─── Shared tool routing (same as inference.py) ───
-from inference import detect_tool, extract_math_expression, is_garbage_response, MODEL_NAME
+from inference import detect_tool, extract_math_expression, extract_search_query, is_garbage_response, MODEL_NAME
 
 # Default MLX model on HuggingFace (auto-downloaded and cached)
-DEFAULT_MLX_MODEL = "mlx-community/FastVLM-0.5B-bf16"
+DEFAULT_MLX_MODEL = "mlx-community/Qwen2-VL-2B-Instruct-4bit"
 
 
 class MLXEdgeAgent:
@@ -38,8 +38,8 @@ class MLXEdgeAgent:
     def __init__(self, model_path: str = DEFAULT_MLX_MODEL):
         try:
             from mlx_vlm import load
-            from mlx_vlm.prompt_utils import apply_chat_template
-            from mlx_vlm.utils import stream_generate
+            from mlx_vlm import apply_chat_template
+            from mlx_vlm import stream_generate
         except ImportError:
             raise ImportError(
                 "MLX VLM not installed. Run:\n"
@@ -91,7 +91,7 @@ class MLXEdgeAgent:
                 self.processor, 
                 config=self.model.config,
                 prompt="Describe.",
-                images=[dummy_img_path],
+                num_images=1,
             )
             
             # Run a short generation to compile MLX graphs
@@ -172,7 +172,7 @@ class MLXEdgeAgent:
             self.processor,
             config=self.model.config,
             prompt=instruction,
-            images=[tmp_path],
+            num_images=1,
         )
         
         # ─── Phase 3: Stream Generation ───
@@ -249,7 +249,7 @@ class MLXEdgeAgent:
                 yield f"_Source: {model_label} + NumPy Matrix Tool_"
                 
             elif tool == "web_search":
-                query = text_for_routing
+                query = extract_search_query(text_for_routing)
                 yield f'Searching: "{query}"\n'
                 try:
                     result = AVAILABLE_TOOLS["web_search"](query)
@@ -257,8 +257,9 @@ class MLXEdgeAgent:
                     
                     # Use MLX model for synthesis (text-only, no image)
                     synth_prompt_text = (
-                        f"Based on this web search result:\n{result}\n\n"
-                        f"Answer this question: {query}\nBe concise and clear."
+                        f"Context from web search:\n{result}\n\n"
+                        f"Question: {query}\n"
+                        f"Answer the question using only the context above. Keep it brief."
                     )
                     
                     synth_formatted = self._apply_chat_template(
