@@ -1,142 +1,126 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
-
 .main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
-
-.intro {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+}
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: transparent;
+  text-align: center;
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
+.title {
+  font-size: var(--landing-main-text-size);
+  line-height: var(--landing-main-text-line-height);
+  letter-spacing: var(--landing-main-text-letter-spacing);
+  color: var(--theme-surface-on-surface);
+  margin-bottom: 2rem;
+  font-weight: 450;
+  font-variation-settings: "wdth" 100, "opsz" 144;
 }
 
-.intro a {
+.highlight {
+  color: var(--palette-blue-600);
+  white-space: nowrap;
+}
+
+.cursor {
+  font-weight: 200;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from, to { color: transparent; }
+  50% { color: var(--palette-blue-600); }
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: var(--theme-surface-on-surface-variant);
+  margin-bottom: 4rem;
+  font-weight: 400;
+}
+
+.ctaContainer {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.primaryButton {
+  background-color: var(--palette-blue-600);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 28px;
+  font-size: 1.1rem;
   font-weight: 500;
-  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
+.primaryButton:hover {
+  background-color: var(--palette-grey-900);
 }
 
-.ctas a {
+.secondaryButton {
+  background-color: transparent;
+  color: var(--palette-blue-600);
+  border: 1px solid var(--theme-outline);
+  padding: 1rem 2.5rem;
+  border-radius: 28px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.secondaryButton:hover {
+  background-color: var(--theme-surface-surface-container);
+}
+
+/* Scroll-Animated Video Box */
+.videoSection {
+  padding: 0 2rem 12rem; /* Removed the top 4rem padding to reduce the gap */
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  background-color: transparent;
+  min-height: 80vh;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.videoBox {
+  width: 100%;
+  max-width: 1200px;
+  aspect-ratio: 16 / 9;
+  background-color: #000000;
+  border-radius: 24px;
+  transform-origin: center center;
+  will-change: transform;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
-}
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 1rem;
   }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+  .ctaContainer {
+    flex-direction: column;
+    align-items: center;
   }
-}
-
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .primaryButton, .secondaryButton {
+    width: 100%;
+    max-width: 300px;
   }
 }
