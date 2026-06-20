@@ -26,9 +26,22 @@ export default function ParticleBackground() {
 
     let moveTimeout: NodeJS.Timeout;
     let lastScrollY = window.scrollY;
+    let isBoxMax = false;
+
+    const handleBoxScale = (e: any) => {
+      isBoxMax = e.detail.isMax;
+      if (isBoxMax) {
+        // Immediately return dots to their original positions
+        mouse.isMoving = false;
+        clearTimeout(moveTimeout);
+      }
+    };
+    
+    // @ts-ignore - CustomEvent
+    window.addEventListener('boxScaleState', handleBoxScale);
 
     const activateMotion = () => {
-      if (mouse.x === -1000) return; // Prevent initial off-screen flyaway if mouse never moved
+      if (isBoxMax || mouse.x === -1000) return; // Ignore tracking when video box is full screen
       mouse.isMoving = true;
       clearTimeout(moveTimeout);
       moveTimeout = setTimeout(() => {
@@ -185,6 +198,8 @@ export default function ParticleBackground() {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
+      // @ts-ignore
+      window.removeEventListener('boxScaleState', handleBoxScale);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

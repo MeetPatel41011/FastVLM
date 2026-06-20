@@ -42,6 +42,9 @@ export default function Home() {
         // This makes it start at half size and grow to full size
         const newScale = 0.5 + (0.5 * progress)
         setVideoScale(newScale)
+        
+        // Notify ParticleBackground if the box is fully expanded
+        window.dispatchEvent(new CustomEvent('boxScaleState', { detail: { isMax: newScale >= 1.0 } }))
       }
     }
 
