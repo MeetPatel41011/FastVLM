@@ -1,5 +1,8 @@
 # FastVLM: Live Q&A Agentic Vision System
 
+> [!NOTE]
+> **Branch Notice:** You are currently on the `main` branch, which features the full **Web-Search Enabled AI**. This version intelligently calls external APIs (Tavily/DuckDuckGo) for real-time information. 
+> If you are looking for the purely local, internet-isolated version, please switch to the [`offline-inference`](https://github.com/MeetPatel41011/FastVLM/tree/offline-inference) branch.
 FastVLM is a powerful, **real-time Live Q&A system** built on top of the FastVLM Vision-Language Model. 
 
 **How it works:** Simply turn on your camera and hold up a handwritten or printed question to the screen. The system will instantly read the question using a lightweight "Gatekeeper", process it with a high-speed Vision-Language Model, and generate a live text answer for you. It's like having an intelligent tutor watching your video feed!
