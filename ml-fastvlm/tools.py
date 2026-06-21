@@ -95,8 +95,7 @@ def execute_web_search(query: str) -> str:
 
     api_key = os.getenv("TAVILY_API_KEY")
     if not api_key:
-        print("DEBUG: TAVILY_API_KEY not found. Using DuckDuckGo fallback.")
-        return execute_fallback_search(query)
+        raise ValueError("TAVILY_API_KEY not found in environment.")
 
     # Clean the query (remove any JSON artifacts if the LLM leaked them)
     if '{' in query:
@@ -110,7 +109,7 @@ def execute_web_search(query: str) -> str:
     
     query = query.strip()
     if not query:
-        return "Error: Cleaned search query is empty."
+        raise ValueError("Cleaned search query is empty.")
 
     print(f"DEBUG: Sending to Tavily -> '{query}'")
     try:
@@ -135,31 +134,14 @@ def execute_web_search(query: str) -> str:
                 return f"🌐 Tavily Summary: {tavily_answer}\n\n[Raw Data Context: {content[:200]}...]"
             elif content:
                 return f"🌐 Tavily Raw: {content}"
-        
-        # If Tavily fails or returns nothing, fallback to DuckDuckGo
-        return execute_fallback_search(query)
+            else:
+                raise RuntimeError("Tavily returned an empty result.")
+        else:
+            raise RuntimeError(f"Tavily API returned status {response.status_code}")
             
     except Exception as e:
         print(f"Tavily Error: {e}")
-        return execute_fallback_search(query)
-
-def execute_fallback_search(query: str) -> str:
-    """Zero-config fallback using DuckDuckGo."""
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        url = f"https://html.duckduckgo.com/html/?q={query}"
-        resp = requests.get(url, headers=headers, timeout=5)
-        if resp.status_code == 200:
-            soup = BeautifulSoup(resp.text, 'html.parser')
-            result = soup.find('a', class_='result__a')
-            snippet = soup.find('a', class_='result__snippet')
-            if result and snippet:
-                return f"\U0001f50e Web (Fallback): {snippet.get_text()}"
-    except Exception:
-        pass
-    return f"Sorry, I couldn't find a specific answer for '{query}'."
+        raise RuntimeError(f"Web search failed: {e}")
 
 
 # ─────────────────────────────────────────────

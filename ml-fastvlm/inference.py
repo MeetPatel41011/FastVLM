@@ -451,13 +451,24 @@ class EdgeAgent:
                     
                     yield f"🧠 Synthesizing answer...\n\n"
                     
-                    # Create text-only prompt
+                    # Create text-only prompt with search context
                     synth_conv = conversation_lib.conv_templates["qwen_2"].copy()
                     synth_qs = (
                         f"Context from web search:\n{result}\n\n"
                         f"Question: {query}\n"
                         f"Answer the question using only the context above. Keep it brief."
                     )
+                except Exception as e:
+                    yield f"⚠️ Tavily Search Failed: {e}\nAnswering from internal knowledge...\n\n"
+                    
+                    # Create text-only prompt WITHOUT search context
+                    synth_conv = conversation_lib.conv_templates["qwen_2"].copy()
+                    synth_qs = (
+                        f"Question: {query}\n"
+                        f"Answer the question directly and concisely."
+                    )
+                
+                try:
                     synth_conv.append_message(synth_conv.roles[0], synth_qs)
                     synth_conv.append_message(synth_conv.roles[1], None)
                     synth_prompt = synth_conv.get_prompt()

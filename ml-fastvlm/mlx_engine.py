@@ -254,15 +254,24 @@ class MLXEdgeAgent:
                 yield f'Searching: "{query}"\n'
                 try:
                     result = AVAILABLE_TOOLS["web_search"](query)
-                    yield f"Synthesizing answer...\n\n"
+                    yield f"🧠 Synthesizing answer...\n\n"
                     
-                    # Use MLX model for synthesis (text-only, no image)
+                    # Use MLX model for synthesis with web context
                     synth_prompt_text = (
                         f"Context from web search:\n{result}\n\n"
                         f"Question: {query}\n"
                         f"Answer the question using only the context above. Keep it brief."
                     )
+                except Exception as e:
+                    yield f"⚠️ Tavily Search Failed: {e}\nAnswering from internal knowledge...\n\n"
                     
+                    # Use MLX model for synthesis WITHOUT web context
+                    synth_prompt_text = (
+                        f"Question: {query}\n"
+                        f"Answer the question directly and concisely."
+                    )
+                    
+                try:
                     synth_formatted = self._apply_chat_template(
                         self.processor,
                         config=self.model.config,
