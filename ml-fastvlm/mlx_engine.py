@@ -269,6 +269,9 @@ class MLXEdgeAgent:
                         prompt=synth_prompt_text,
                     )
                     
+                    # Prevent synthesizer from hallucinating by forcing it to just output the answer
+                    synth_formatted += "The answer is: "
+                    
                     for token_result in self._stream_generate(
                         self.model, self.processor, synth_formatted,
                         max_tokens=256,
