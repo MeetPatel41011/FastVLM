@@ -88,6 +88,12 @@ export default function ActiveVisionCamera({
     setHasMounted(true);
   }, []);
 
+  // Use refs to access latest props inside the animation loop without restarting the camera
+  const propsRef = useRef({ isProcessing, cooldownActive, backendOnline });
+  useEffect(() => {
+    propsRef.current = { isProcessing, cooldownActive, backendOnline };
+  }, [isProcessing, cooldownActive, backendOnline]);
+
   useEffect(() => {
     if (!shouldEnable) return;
 
@@ -197,47 +203,48 @@ export default function ActiveVisionCamera({
 
       // --- Status + Auto-trigger Logic ---
       const now = Date.now();
-      const canCheck = !isProcessing && !cooldownActive && backendOnline && !stateRef.current.isChecking;
+      const currentProps = propsRef.current;
+      const canCheck = !currentProps.isProcessing && !currentProps.cooldownActive && currentProps.backendOnline && !stateRef.current.isChecking;
 
       if (avgMotion < 7.0) {
         // Frame is stable (relaxed threshold — allows natural hand-shake with paper)
         stateRef.current.stableFrameCount++;
 
         if (hasTextLikeContent && stateRef.current.stableFrameCount > 8 && canCheck && (now - stateRef.current.lastCheckTime > 3000)) {
-          // Stable + edges detected + not already checking → Tier 3: backend check
-          stateRef.current.isChecking = true;
-          stateRef.current.lastCheckTime = now;
-          setStatus("CHECKING");
+           // Stable + edges detected + not already checking → Tier 3: backend check
+           stateRef.current.isChecking = true;
+           stateRef.current.lastCheckTime = now;
+           setStatus("CHECKING");
 
-          const lowResFrame = captureLowResFrame();
-          if (lowResFrame) {
-            try {
-              const res = await fetch("/api/backend/api/quick_check", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Bypass-Tunnel-Reminder": "true" },
-                body: JSON.stringify({ image_base64: lowResFrame }),
-                signal: AbortSignal.timeout(3000),
-              });
-              const data = await res.json();
-              
-              console.log(`🔍 Backend response:`, data);
+           const lowResFrame = captureLowResFrame();
+           if (lowResFrame) {
+             try {
+               const res = await fetch("/api/backend/api/quick_check", {
+                 method: "POST",
+                 headers: { "Content-Type": "application/json", "Bypass-Tunnel-Reminder": "true" },
+                 body: JSON.stringify({ image_base64: lowResFrame }),
+                 signal: AbortSignal.timeout(3000),
+               });
+               const data = await res.json();
+               
+               console.log(`🔍 Backend response:`, data);
 
-              if (data.has_question && !isProcessing && !cooldownActive) {
-                setStatus("DETECTED");
-                console.log(`✅ QUESTION DETECTED — waking VLM!`);
-                // Text confirmed! Capture full-res and send to VLM
-                const fullFrame = captureFullFrame();
-                if (fullFrame) {
-                  onAutoDetect(fullFrame, data.ocr_preview);
-                }
-              } else {
-                setStatus("IDLE");
-              }
-            } catch {
-              setStatus("IDLE");
-            }
-          }
-          stateRef.current.isChecking = false;
+               if (data.has_question && !currentProps.isProcessing && !currentProps.cooldownActive) {
+                 setStatus("DETECTED");
+                 console.log(`✅ QUESTION DETECTED — waking VLM!`);
+                 // Text confirmed! Capture full-res and send to VLM
+                 const fullFrame = captureFullFrame();
+                 if (fullFrame) {
+                   onAutoDetect(fullFrame, data.ocr_preview);
+                 }
+               } else {
+                 setStatus("IDLE");
+               }
+             } catch {
+               setStatus("IDLE");
+             }
+           }
+           stateRef.current.isChecking = false;
         } else {
           // Stable but no text edges (or still accumulating stable frames) — stay quiet
           setStatus("IDLE");
@@ -265,7 +272,7 @@ export default function ActiveVisionCamera({
         videoRef.current.srcObject = null;
       }
     };
-  }, [shouldEnable, isProcessing, cooldownActive, backendOnline, captureFullFrame, captureLowResFrame, onAutoDetect]);
+  }, [shouldEnable, captureFullFrame, captureLowResFrame, onAutoDetect]);
 
   const statusDisplay = {
     IDLE: { text: "Scanning...", dot: "idle" },
