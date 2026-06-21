@@ -157,15 +157,13 @@ class MLXEdgeAgent:
         
         if user_prompt:
             instruction = (
-                f'The user asks: "{user_prompt}"\n'
-                "Look at this image. If there is any text written in the image, read it first.\n"
-                "Then answer the user's question. Be concise and factual."
+                f"Question: \"{user_prompt}\"\n"
+                "Answer the question directly and concisely. Do NOT describe the image."
             )
         else:
             instruction = (
-                "Read ALL the text written in this image carefully and exactly.\n"
-                "State what the text says. If it contains a question, answer it.\n"
-                "Format: First state what you read, then provide the answer."
+                "Read the text in this picture and answer the question it asks. "
+                "Do NOT describe the picture. Just provide the exact answer."
             )
         
         formatted_prompt = self._apply_chat_template(
