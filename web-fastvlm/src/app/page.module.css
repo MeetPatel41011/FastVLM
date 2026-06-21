@@ -124,3 +124,35 @@
     max-width: 300px;
   }
 }
+
+/* About Section */
+.aboutSection {
+  padding: 4rem 2rem 8rem;
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.aboutContent {
+  max-width: 800px;
+  text-align: left;
+  color: var(--theme-surface-on-surface);
+}
+
+.aboutContent h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.aboutContent p {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  color: var(--theme-surface-on-surface-variant);
+}
+
+.aboutContent strong {
+  color: var(--theme-surface-on-surface);
+  font-weight: 600;
+}

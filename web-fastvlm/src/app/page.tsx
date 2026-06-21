@@ -9,9 +9,9 @@ export default function Home() {
   const [videoScale, setVideoScale] = useState(0.5)
   const videoBoxRef = useRef<HTMLDivElement>(null)
   
-  const prefix = "Built for developers in the "
-  const highlight = "agent-first"
-  const suffix = " era"
+  const prefix = "FastVLM: Live Camera Q&A at "
+  const highlight = "Zero Latency"
+  const suffix = " on the Edge"
   const fullText = prefix + highlight + suffix
   
   useEffect(() => {
@@ -75,10 +75,14 @@ export default function Home() {
             )}
             <span className={styles.cursor}>|</span>
           </h1>
-          <p className={styles.subtitle}>Build the new way</p>
+          <p className={styles.subtitle}>A demonstration of end-to-end problem solving and modern AI architecture.</p>
           <div className={styles.ctaContainer}>
-            <button className={styles.primaryButton}>Download Antigravity</button>
-            <button className={styles.secondaryButton}>See Overview</button>
+            <a href="https://github.com/MeetPatel41011/FastVLM" target="_blank" rel="noopener noreferrer">
+              <button className={styles.primaryButton}>View Source Code</button>
+            </a>
+            <a href="https://www.linkedin.com/in/meetpatel41011/" target="_blank" rel="noopener noreferrer">
+              <button className={styles.secondaryButton}>Connect on LinkedIn</button>
+            </a>
           </div>
         </div>
       </section>
@@ -91,6 +95,23 @@ export default function Home() {
           style={{ transform: `scale(${videoScale})`, overflow: 'hidden', display: 'flex' }}
         >
           <FastVLMCore />
+        </div>
+      </section>
+
+      {/* Recruiter / Resume Section */}
+      <section className={styles.aboutSection}>
+        <div className={styles.aboutContent}>
+          <h2>Why I Built This</h2>
+          <p>
+            I built FastVLM to demonstrate my core engineering philosophy: 
+            <strong> taking a complex problem, chopping it down into manageable parts, and getting things done no matter what.</strong>
+          </p>
+          <p>
+            This project required navigating cutting-edge local LLMs (Qwen2-VL), integrating live WebRTC camera feeds, 
+            orchestrating a Python backend with a Next.js frontend, and deploying seamlessly to cloud GPUs on Modal. 
+            When challenges arose—like hardware constraints or cross-origin latency—I broke them down, 
+            researched the solutions, and engineered a zero-latency hybrid architecture that works natively in the browser.
+          </p>
         </div>
       </section>
     </main>
