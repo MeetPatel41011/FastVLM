@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 
 interface ActiveVisionCameraProps {
-  onAutoDetect: (base64Image: string) => void;
+  onAutoDetect: (base64Image: string, ocrText?: string) => void;
   onStop?: () => void;
   isProcessing: boolean;
   shouldEnable: boolean;
@@ -228,7 +228,7 @@ export default function ActiveVisionCamera({
                 // Text confirmed! Capture full-res and send to VLM
                 const fullFrame = captureFullFrame();
                 if (fullFrame) {
-                  onAutoDetect(fullFrame);
+                  onAutoDetect(fullFrame, data.ocr_preview);
                 }
               } else {
                 setStatus("IDLE");

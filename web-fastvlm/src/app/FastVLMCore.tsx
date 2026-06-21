@@ -96,7 +96,7 @@ export default function FastVLMCore() {
   }, [checkBackendHealth]);
 
   // ─── Auto-Detect Handler (replaces manual capture) ───
-  const handleAutoDetect = useCallback(async (base64Image: string) => {
+  const handleAutoDetect = useCallback(async (base64Image: string, ocrText?: string) => {
     if (!backendOnline || isProcessing || cooldownActive) return;
 
     if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
@@ -104,7 +104,7 @@ export default function FastVLMCore() {
     setError(null);
     setStatus("THINKING");
 
-    const textInput = manualPrompt.trim();
+    const textInput = manualPrompt.trim() || ocrText?.trim() || "";
 
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
