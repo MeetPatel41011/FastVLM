@@ -104,7 +104,7 @@ def extract_search_query(text: str) -> str:
             return extracted
     # Fallback: Strip common conversational prefixes
     text = re.sub(r'(?i)^(the\s+(?:text|question|image).*?(?:reads|says|is|asks|shows)?:?\s*)', '', text)
-    return text.strip(' "\'')
+    return text.strip(' "\'').replace('\n', ' ').replace('\r', '')
 
 
 
