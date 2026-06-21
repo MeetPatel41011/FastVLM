@@ -11,9 +11,9 @@ image = (
     modal.Image.debian_slim(python_version="3.11")
     .apt_install("tesseract-ocr")
     .pip_install(
-        "torch",
-        "torchvision",
-        extra_index_url="https://download.pytorch.org/whl/cu121"
+        "torch==2.4.1",
+        "torchvision==0.19.1",
+        index_url="https://download.pytorch.org/whl/cu121"
     )
     .pip_install(
         "transformers",

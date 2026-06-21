@@ -324,12 +324,10 @@ class EdgeAgent:
         user_prompt = prompt.strip() if prompt else ""
         
         if user_prompt:
-            # Mode A: User asked a question verbally (or typed it)
-            # The VLM should read any text in the image for context, then answer
+            # Mode A: We have a text prompt (from voice, typing, or OCR pipeline)
             instruction = (
-                f"The user asks: \"{user_prompt}\"\n"
-                "Look at this image. If there is any text written in the image, read it first.\n"
-                "Then answer the user's question. Be concise and factual."
+                f"Question: \"{user_prompt}\"\n"
+                "Answer the question directly and concisely. Do NOT describe the image."
             )
         else:
             # Mode B: No verbal question — read handwritten text and answer it
