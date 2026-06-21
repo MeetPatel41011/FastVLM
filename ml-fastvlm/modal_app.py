@@ -45,7 +45,7 @@ image = (
     image=image,
     gpu="T4",
     volumes={"/root/app/checkpoints": vol}, # Mount the weights where inference.py expects them
-    secrets=[modal.Secret.from_name("tavily-secret", environment_missing_ok=True)], # Securely pass the Tavily API key
+    secrets=[modal.Secret.from_name("tavily-secret")], # Securely pass the Tavily API key
     timeout=600, # 10 minute timeout
     scaledown_window=60, # Keep container alive for 1 min after request to prevent cold starts on follow-up questions
 )
