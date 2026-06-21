@@ -1,7 +1,6 @@
 import modal
 import os
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
+
 
 # 1. Define the Modal App and the Volume for the PyTorch weights
 app = modal.App("fastvlm-unified")
@@ -65,6 +64,8 @@ def web():
     import server
     from inference import EdgeAgent
     from contextlib import asynccontextmanager
+    from fastapi import FastAPI
+    from fastapi.staticfiles import StaticFiles
     
     @asynccontextmanager
     async def lifespan(app):
