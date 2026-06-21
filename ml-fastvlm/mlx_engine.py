@@ -175,6 +175,9 @@ class MLXEdgeAgent:
             num_images=1,
         )
         
+        # Append assistant start string to bypass image captioning bias
+        formatted_prompt += "The answer is: "
+        
         # ─── Phase 3: Stream Generation ───
         max_tokens = 128 if not user_prompt else 512
         
