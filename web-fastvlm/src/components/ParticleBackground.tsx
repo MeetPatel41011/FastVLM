@@ -46,7 +46,7 @@ export default function ParticleBackground() {
       clearTimeout(moveTimeout);
       moveTimeout = setTimeout(() => {
         mouse.isMoving = false;
-      }, 700); // Keep nodes gathered for 0.7 seconds after motion stops
+      }, 1500); // Increased to 1.5s to keep particles active during brief trackpad pauses
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -54,15 +54,24 @@ export default function ParticleBackground() {
       mouse.y = e.clientY;
       activateMotion();
     };
+    
+    const handleTouch = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+        activateMotion();
+      }
+    };
 
     const handleScroll = () => {
-      // Just activate motion. The update() function will use the last known
-      // mouse.x and mouse.y to attract the nodes, exactly like handleMouseMove.
       activateMotion();
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchstart', handleTouch);
+    window.addEventListener('touchmove', handleTouch);
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('wheel', handleScroll);
 
     class Particle {
       x: number;
@@ -197,7 +206,10 @@ export default function ParticleBackground() {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouch);
+      window.removeEventListener('touchmove', handleTouch);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', handleScroll);
       // @ts-ignore
       window.removeEventListener('boxScaleState', handleBoxScale);
       cancelAnimationFrame(animationFrameId);
