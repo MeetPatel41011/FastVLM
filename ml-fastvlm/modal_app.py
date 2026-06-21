@@ -11,8 +11,8 @@ image = (
     modal.Image.debian_slim(python_version="3.11")
     .apt_install("tesseract-ocr")
     .pip_install(
-        "torch==2.3.0",
-        "torchvision==0.18.0",
+        "torch",
+        "torchvision",
         extra_index_url="https://download.pytorch.org/whl/cu121"
     )
     .pip_install(
