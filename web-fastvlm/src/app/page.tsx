@@ -9,8 +9,8 @@ export default function Home() {
   const [videoScale, setVideoScale] = useState(0.5)
   const videoBoxRef = useRef<HTMLDivElement>(null)
   
-  const prefix = "FastVLM: Live Camera Q&A at "
-  const highlight = "Zero Latency"
+  const prefix = "FastVLM: Live Camera Q&A with "
+  const highlight = "Sub-400ms Latency"
   const suffix = " on the Edge"
   const fullText = prefix + highlight + suffix
   
@@ -110,7 +110,7 @@ export default function Home() {
             This project required navigating cutting-edge local LLMs (Qwen2-VL), integrating live WebRTC camera feeds, 
             orchestrating a Python backend with a Next.js frontend, and deploying seamlessly to cloud GPUs on Modal. 
             When challenges arose—like hardware constraints or cross-origin latency—I broke them down, 
-            researched the solutions, and engineered a zero-latency hybrid architecture that works natively in the browser.
+            researched the solutions, and engineered a sub-400ms hybrid architecture that works natively in the browser.
           </p>
         </div>
       </section>
