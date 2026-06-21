@@ -333,11 +333,9 @@ class EdgeAgent:
             )
         else:
             # Mode B: No verbal question — read handwritten text and answer it
-            # This is the primary OCR mode for handwritten questions
             instruction = (
-                "The user has shown you an image containing a written question.\n"
-                "Treat the text in the image as a direct question addressed to you, and answer it concisely.\n"
-                "Do NOT describe the image or state what the text says. Just provide the answer directly."
+                "Read the question written in the image and answer it directly. "
+                "Do NOT describe the image. Just provide the exact answer to the question."
             )
         
         qs = DEFAULT_IMAGE_TOKEN + '\n' + instruction
