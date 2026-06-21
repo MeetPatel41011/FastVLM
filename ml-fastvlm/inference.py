@@ -104,7 +104,7 @@ def extract_search_query(text: str) -> str:
             return extracted
     # Fallback: Strip common conversational prefixes
     text = re.sub(r'(?i)^(the\s+(?:text|question|image).*?(?:reads|says|is|asks|shows)?:?\s*)', '', text)
-    return text.strip(' "\'').replace('\n', ' ').replace('\r', '')
+    return text.strip(' "\'')
 
 
 
@@ -459,7 +459,7 @@ class EdgeAgent:
                         f"Answer the question using only the context above. Keep it brief."
                     )
                     synth_conv.append_message(synth_conv.roles[0], synth_qs)
-                    synth_conv.append_message(synth_conv.roles[1], "The answer is: ")
+                    synth_conv.append_message(synth_conv.roles[1], None)
                     synth_prompt = synth_conv.get_prompt()
                     
                     # Standard text tokenization (no image tokens)
