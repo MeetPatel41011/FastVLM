@@ -76,7 +76,7 @@ def web():
         print("🚀 Modal container starting — loading FastVLM model onto GPU...")
         model_path = os.getenv("MODEL_PATH", "checkpoints/llava-fastvithd_0.5b_stage3")
         try:
-            server.agent = EdgeAgent(model_path=model_path)
+            server.agent = EdgeAgent(model_path=model_path, device="cuda")
             print("✅ Model loaded successfully!")
         except Exception as e:
             print(f"❌ Failed to load model: {e}")

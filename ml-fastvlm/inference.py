@@ -332,13 +332,13 @@ class EdgeAgent:
         else:
             # Mode B: No verbal question — read handwritten text and answer it
             instruction = (
-                "Read the question written in the image and answer it directly. "
-                "Do NOT describe the image. Just provide the exact answer to the question."
+                "Read the question written in the picture and answer it directly. "
+                "Do NOT describe the picture. Just provide the exact answer."
             )
         
         qs = DEFAULT_IMAGE_TOKEN + '\n' + instruction
         conv.append_message(conv.roles[0], qs)
-        conv.append_message(conv.roles[1], None)
+        conv.append_message(conv.roles[1], "The answer is: ")
         formatted_prompt = conv.get_prompt()
 
         # ─── Optimization: torch.inference_mode() disables autograd for faster GPU ops ───
