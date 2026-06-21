@@ -477,6 +477,8 @@ class EdgeAgent:
                         do_sample=False,
                         use_cache=True,
                         pad_token_id=self.tokenizer.pad_token_id,
+                        eos_token_id=self.tokenizer.eos_token_id,
+                        repetition_penalty=1.1,
                     )
                     
                     if stop_event is not None:
